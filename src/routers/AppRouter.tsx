@@ -8,6 +8,7 @@ import LoginPage from "../pages/loginPage";
 import { useAppSelector } from "../redux/hooke";
 import LayoutContent from "../components/layout";
 import Notification from "../components/common/notification";
+import QuestionModel from "../components/common/questionModel";
 
 const AppRoutes = () => {
   const adminIsLoggedIn = useAppSelector((state) => state.admin.adminIsLoggedIn);
@@ -40,6 +41,7 @@ const AppRoutes = () => {
         </BrowserRouter>
       </Suspense>
       <Notification />
+      <QuestionModel />
     </>
   );
 };

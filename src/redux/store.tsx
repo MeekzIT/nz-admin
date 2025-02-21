@@ -6,6 +6,8 @@ import projectsSlice from './slices/projectsSlice'
 import notificationSlice from "./slices/notificatinSlice"
 import homeAboutShot from "./slices/homeAboutSlice"
 import homeOffers from "./slices/homeOffers"
+import contactsSlice from "./slices/contactsSlice"
+import questionMoadlSlice from "./slices/questionModalSlice"
 
 export const store = configureStore({
   reducer: {
@@ -14,9 +16,10 @@ export const store = configureStore({
     homeOffer: homeOffers,
     admin: adminSlice,
     about: aboutSlice,
+    contacts: contactsSlice,
     projects: projectsSlice,
-    notification: notificationSlice
-
+    notification: notificationSlice,
+    questionModal: questionMoadlSlice
   },
 });
 

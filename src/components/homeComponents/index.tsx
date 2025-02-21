@@ -4,11 +4,8 @@ import SliderHomePage from './sliderHomePage';
 import AboutUsHome from './aboutUsHomePage';
 import BuildingHomePage from './buildingHomePage';
 import WeOffersHomePage from './weOffersHomePage';
-import ContsctUsHomePage from './contsctUsHomePage';
 
 const HomePage = ({ pageName }: HomePageTypes) => {
-
-
     switch (pageName) {
         case "Slider":
             return <SliderHomePage />
@@ -18,8 +15,6 @@ const HomePage = ({ pageName }: HomePageTypes) => {
             return < BuildingHomePage />
         case "WeOffers":
             return < WeOffersHomePage />
-        case "ContsctUs":
-            return <ContsctUsHomePage />
         default:
             return
     }

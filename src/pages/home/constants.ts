@@ -3,5 +3,4 @@ export const homePageMenuTabs = [
     { value: "AboutUs", label: "AboutUs" },
     { value: "Building", label: "Building" },
     { value: "WeOffers", label: "WeOffers" },
-    { value: "ContsctUs", label: "ContsctUs" },
 ]
