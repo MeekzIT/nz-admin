@@ -1,5 +1,3 @@
-@import '../../commonStyles/variables';
-
 .app-bar-header {
     & a {
         margin-right: 16px;
@@ -11,7 +9,7 @@
         }
 
         &.active {
-            color: $secondary-color;
+            color: "#996830";
         }
     }
 }
@@ -21,6 +19,6 @@
         color: black;
     }
     a.active {
-        color: $secondary-color;
+        color: "#996830";
     }
 }

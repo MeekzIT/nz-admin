@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooke'
-import { fetchCreateOfferData, fetchDeleteOfferData, fetchGetOfferData } from '../../../redux/slices/homeOffers/fetchService'
+import { fetchCreateOfferData, fetchGetOfferData } from '../../../redux/slices/homeOffers/fetchService'
 import MapCreateImages from '../../mapImagesData'
 import AddImageBlock from '../../common/addImageBlock'
 import { Box, Button } from '@mui/material'
@@ -10,15 +10,13 @@ import { PageTitle } from '../../../commonStyles'
 import { offerImageKey } from './constants'
 import { handleChangeTextFildsOffer, resetOfferForCreateData } from '../../../redux/slices/homeOffers'
 import Loader from '../../common/loader'
-import QuestionModel from '../../common/questionModel'
+import { setActionKey, setElemetId, setTitleForQuestionModal, toggleModalStatus } from '../../../redux/slices/questionModalSlice'
+import { QuestionModalActions } from '../../../types'
 
 const WeOffersHomePage = () => {
     const dispatch = useAppDispatch()
     const { allOfferData, offerForCreate, loading } = useAppSelector((state) => state.homeOffer)
     const [isOpenCreateProjectModal, setIsOpenCreateProjectModal] = useState(false)
-    const [isOpenQuestionModal, setIsOpenQuestionModal] = useState(false)
-    const [imageIdForDlete, setImageIdForDlete] = useState<number | null>(null)
-
 
     useEffect(() => {
         dispatch(fetchGetOfferData())
@@ -32,18 +30,11 @@ const WeOffersHomePage = () => {
         })
     }
 
-    const deleteOffer = () => {
-        if (imageIdForDlete) {
-            dispatch(fetchDeleteOfferData(imageIdForDlete)).then(() => {
-                dispatch(fetchGetOfferData())
-                setIsOpenQuestionModal(false)
-            })
-        }
-    }
-
-    const setImageIdOpenQuestionModal = (id: number) => {
-        setIsOpenQuestionModal(true)
-        setImageIdForDlete(id)
+    const openModalQuestionForDeleteContact = (id: number) => {
+        dispatch(toggleModalStatus())
+        dispatch(setTitleForQuestionModal({ titleModal: 'Ջնջել լուսանկարը' }))
+        dispatch(setElemetId({ id }))
+        dispatch(setActionKey({ actionKey: QuestionModalActions.DELETE_OFFER }))
     }
 
     if (loading) {
@@ -54,16 +45,9 @@ const WeOffersHomePage = () => {
         <Box>
             <PageTitle>Մենք առաջարկում ենք</PageTitle>
             <Box sx={{ display: "flex", gap: 2 }}>
-                <MapCreateImages imagesData={allOfferData} setImageIdForDlete={setImageIdOpenQuestionModal} />
+                <MapCreateImages imagesData={allOfferData} setImageIdForDlete={openModalQuestionForDeleteContact} />
                 <AddImageBlock action={() => setIsOpenCreateProjectModal(!isOpenCreateProjectModal)} />
             </Box>
-
-            <QuestionModel
-                title='Ջնջել լուսանկարը'
-                isOpenDeleteModal={isOpenQuestionModal}
-                handleClose={() => setIsOpenQuestionModal(false)}
-                actionHandler={deleteOffer}
-            />
 
             <BaseModal
                 isOpen={isOpenCreateProjectModal}

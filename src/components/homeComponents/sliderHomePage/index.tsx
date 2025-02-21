@@ -1,36 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooke'
-import { fetchCreateSlider, fetchDeleteSlider, fetchEditSlider, fetchGetSliderData, fetchGetSlidersData } from '../../../redux/slices/homeSliderSlice/fetchService'
+import { fetchCreateSlider, fetchEditSlider, fetchGetSliderData, fetchGetSlidersData } from '../../../redux/slices/homeSliderSlice/fetchService'
 import Loader from '../../common/loader'
 import { Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Button } from '@mui/material'
 import { BlockWithBackgroundBlend, Container, PageTitle } from '../../../commonStyles'
 import TapsForChangeTextComponent from '../../common/tapsForChangeTextComponent'
 import { isEmptyObject } from '../../../utils/objectUtils'
 import { sliderImageTypeKeys, sliderTypeKeys } from './constants'
-import { handleChangeTextFilds, resetStates } from '../../../redux/slices/homeSliderSlice'
+import { handleChangeTextFilds } from '../../../redux/slices/homeSliderSlice'
 import TapsForChangeImagesComponent from '../../common/tapsForChangeImagesComponent'
-import QuestionModel from '../../common/questionModel'
 import BaseModal from '../../common/modal'
+import { setActionKey, setElemetId, setTitleForQuestionModal, toggleModalStatus } from '../../../redux/slices/questionModalSlice'
+import { QuestionModalActions } from '../../../types'
 
 const SliderHomePage = () => {
     const dispatch = useAppDispatch()
     const { sliderNames, currentSlider, loading, createSliderData } = useAppSelector((state) => state.home)
-
     const [currentSliderID, setCurrentSliderID] = useState<number | string>("")
-    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
     const [isOpenCreateProjectModal, setIsOpenCreateProjectModal] = useState(false)
 
-
-
+    useEffect(() => {
+        dispatch(fetchGetSlidersData())
+    }, [dispatch])
+    
     useEffect(() => {
         if (sliderNames.length > 0) {
             setCurrentSliderID(sliderNames[0].id)
         }
     }, [sliderNames])
 
-    useEffect(() => {
-        dispatch(fetchGetSlidersData())
-    }, [dispatch])
 
     useEffect(() => {
         if (currentSliderID) {
@@ -43,14 +41,6 @@ const SliderHomePage = () => {
         setCurrentSliderID(event.target.value as string);
     };
 
-
-    const deleteSlider = () => {
-        dispatch(fetchDeleteSlider(Number(currentSliderID))).then(() => {
-            // dispatch(resetStates())
-            dispatch(fetchGetSlidersData())
-        })
-    }
-
     const saveDataHandler = () => {
         if (currentSliderID && currentSlider) {
             dispatch(fetchEditSlider({ id: Number(currentSliderID), data: currentSlider }))
@@ -62,6 +52,13 @@ const SliderHomePage = () => {
             dispatch(fetchGetSlidersData())
         })
         setIsOpenCreateProjectModal(false)
+    }
+
+    const openModalQuestionForDeleteContact = () => {
+        dispatch(toggleModalStatus())
+        dispatch(setTitleForQuestionModal({ titleModal: "Դուք իսկապես ցանկանում եք ջնջել սլայդերը?" }))
+        dispatch(setElemetId({ id: Number(currentSliderID) }))
+        dispatch(setActionKey({ actionKey: QuestionModalActions.DELETE_SLIDER }))
     }
 
     if (loading) {
@@ -107,16 +104,9 @@ const SliderHomePage = () => {
 
                     <BlockWithBackgroundBlend sx={{ display: "flex", gap: 1 }}>
                         <Button variant="contained" onClick={saveDataHandler} sx={{ p: 2, width: "100%" }} color="success">Պահպանել</Button>
-                        <Button variant="contained" onClick={() => setIsOpenDeleteModal(true)} sx={{ p: 2, width: "100%" }} color="error">Ջնջել նախագիծը</Button>
+                        <Button variant="contained" onClick={openModalQuestionForDeleteContact} sx={{ p: 2, width: "100%" }} color="error">Ջնջել նախագիծը</Button>
                     </BlockWithBackgroundBlend>
                 </Container>}
-
-            <QuestionModel
-                actionHandler={deleteSlider}
-                handleClose={() => setIsOpenDeleteModal(false)}
-                isOpenDeleteModal={isOpenDeleteModal}
-                title="Դուք իսկապես ցանկանում եք ջնջել սլայդերը?"
-            />
 
             <BaseModal
                 isOpen={isOpenCreateProjectModal}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooke"
-import { fetchChangeInfoProjects, fetchCreateNewProject, fetchDeleteProject, fetchGetInfoProject, fetchGetInfoProjects } from "../../redux/slices/projectsSlice/fetchService"
+import { fetchChangeInfoProjects, fetchCreateNewProject, fetchGetInfoProject, fetchGetInfoProjects } from "../../redux/slices/projectsSlice/fetchService"
 import { BlockWithBackgroundBlend, Container, PageTitle } from "../../commonStyles"
 import Loader from "../../components/common/loader"
 import { handleChangeProjectData, resetCurrentProjectData } from "../../redux/slices/projectsSlice"
@@ -10,7 +10,8 @@ import { imagesDataForMapInTapsComponent, textDataForMapInTapsComponent } from "
 import { isEmptyObject } from "../../utils/objectUtils"
 import TapsForChangeTextComponent from "../../components/common/tapsForChangeTextComponent"
 import TapsForChangeImagesComponent from "../../components/common/tapsForChangeImagesComponent"
-import QuestionModel from "../../components/common/questionModel"
+import { toggleModalStatus, setTitleForQuestionModal, setElemetId, setActionKey } from "../../redux/slices/questionModalSlice"
+import { QuestionModalActions } from "../../types"
 
 const ProjectsPage = () => {
     const dispatch = useAppDispatch()
@@ -18,14 +19,12 @@ const ProjectsPage = () => {
     const { projectsNames, loading, currentProject, createProectdata } = dataProjects
 
     const [isOpenCreateProjectModal, setIsOpenCreateProjectModal] = useState(false)
-    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
     const [currentProjectId, setCurrentProjectId] = useState("");
 
     useEffect(() => {
         if (projectsNames.length > 0) {
             setCurrentProjectId(projectsNames[0].id.toString())
         }
-
     }, [projectsNames])
 
     useEffect(() => {
@@ -63,12 +62,11 @@ const ProjectsPage = () => {
         setIsOpenCreateProjectModal(false)
     }
 
-    const deleteProject = () => {
-        dispatch(fetchDeleteProject(Number(currentProjectId))).then(() => {
-            dispatch(resetCurrentProjectData())
-            dispatch(fetchGetInfoProjects())
-        })
-        setIsOpenDeleteModal(false)
+    const openModalQuestionForDeleteContact = () => {
+        dispatch(toggleModalStatus())
+        dispatch(setTitleForQuestionModal({ titleModal: "Դուք իսկապես ցանկանում եք ջնջել նախագիծը?" }))
+        dispatch(setElemetId({ id: Number(currentProjectId) }))
+        dispatch(setActionKey({ actionKey: QuestionModalActions.DELETE_PROJECT }))
     }
 
 
@@ -111,18 +109,10 @@ const ProjectsPage = () => {
                     </BlockWithBackgroundBlend>
                     <BlockWithBackgroundBlend sx={{ display: "flex", gap: 2 }}>
                         <Button variant="contained" onClick={saveDataHandler} sx={{ p: 2, width: "100%" }} color="success">Պահպանել</Button>
-                        <Button variant="contained" onClick={() => setIsOpenDeleteModal(true)} sx={{ p: 2, width: "100%" }} color="error">Ջնջել նախագիծը</Button>
+                        <Button variant="contained" onClick={openModalQuestionForDeleteContact} sx={{ p: 2, width: "100%" }} color="error">Ջնջել նախագիծը</Button>
                     </BlockWithBackgroundBlend>
 
                 </Container >}
-
-
-            <QuestionModel
-                actionHandler={deleteProject}
-                handleClose={() => setIsOpenDeleteModal(false)}
-                isOpenDeleteModal={isOpenDeleteModal}
-                title="Դուք իսկապես ցանկանում եք ջնջել նախագիծը?"
-            />
 
             <BaseModal
                 isOpen={isOpenCreateProjectModal}

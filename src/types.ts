@@ -1,0 +1,6 @@
+export enum QuestionModalActions {
+    DELETE_CONTACT = "DELETE_CONTACT",
+    DELETE_SLIDER = "DELETE_SLIDER",
+    DELETE_OFFER = "DELETE_OFFER",
+    DELETE_PROJECT = "DELETE_PROJECT",
+  }
