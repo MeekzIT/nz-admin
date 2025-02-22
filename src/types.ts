@@ -3,4 +3,5 @@ export enum QuestionModalActions {
     DELETE_SLIDER = "DELETE_SLIDER",
     DELETE_OFFER = "DELETE_OFFER",
     DELETE_PROJECT = "DELETE_PROJECT",
+    DELETE_BID = "DELETE_BID",
   }

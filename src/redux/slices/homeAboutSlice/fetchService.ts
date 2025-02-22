@@ -8,11 +8,12 @@ import { notificationEnum } from "../notificatinSlice/types";
 //GET_ABOUT_SHORT_DATA
 export const fetchGetAboutShortData = createAsyncThunk(
   "get/slider",
-  async (id: number, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get(`/about-short/single/${id}`);
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -27,6 +28,7 @@ export const fetchEditAboutUsShortData = createAsyncThunk(
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CHANG_DATA, statusNotification: notificationEnum.SUCCESS }))
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }

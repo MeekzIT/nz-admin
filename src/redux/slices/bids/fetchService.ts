@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../fetchService";
-import { CreateTableRow, } from "./types";
 import { setNotification } from "../notificatinSlice";
-import { SUCCESS_TEXT_AFTER_CHANG_DATA } from "../../../constants";
+import { SUCCESS_TEXT_AFTER_CHANG_DATA, SUCCESS_TEXT_DELETE } from "../../../constants";
 import { notificationEnum } from "../notificatinSlice/types";
+import { EditBidsDataType } from "./types";
 
-export const fetchGetContactsData = createAsyncThunk(
-  "get/contacts",
+export const fetchGetBidsData = createAsyncThunk(
+  "get/bids",
   async (_, { rejectWithValue, dispatch }) => {
     try {
-      const response = await api.get(`/contact-us`);
+      const response = await api.get(`/bid`);
       return response.data;
     } catch (error: any) {
       dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
@@ -18,25 +18,14 @@ export const fetchGetContactsData = createAsyncThunk(
   }
 );
 
-export const FetchCreateContact = createAsyncThunk(
-  "create_Contact",
-  async (data: CreateTableRow, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await api.post(`/contact-us`, data);
-      return response.data;
-    } catch (error: any) {
-      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
-      return rejectWithValue(error.response.data.error[0]);
-    }
-  }
-);
-
-export const FetchDeleteContact = createAsyncThunk(
-  "delete_contact",
+export const FetchDeleteBid = createAsyncThunk(
+  "delete_bid",
   async (id: number, { rejectWithValue, dispatch }) => {
     try {
-      const response = await api.delete(`/contact-us/destroy/${id}`);
-      dispatch(fetchGetContactsData())
+      const response = await api.delete(`/bid/destroy/${id}`);
+      dispatch(setNotification({ messageNotification: SUCCESS_TEXT_DELETE, statusNotification: notificationEnum.SUCCESS }))
+
+      dispatch(fetchGetBidsData())
       return response.data;
     } catch (error: any) {
       dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
@@ -45,13 +34,12 @@ export const FetchDeleteContact = createAsyncThunk(
   }
 );
 
-export const FetchEditContact = createAsyncThunk(
-  "edit_contact",
-  async ({ id, data }: { id: number, data: CreateTableRow }, { rejectWithValue, dispatch }) => {
+export const FetchEditBid = createAsyncThunk(
+  "edit_bid",
+  async ({ id, data }: { id: number, data: EditBidsDataType }, { rejectWithValue, dispatch }) => {
     try {
-      const response = await api.put(`/contact-us/edit/${id}`, data);
+      const response = await api.put(`/bid/edit/${id}`, data);
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CHANG_DATA, statusNotification: notificationEnum.SUCCESS }))
-      dispatch(fetchGetContactsData())
       return response.data;
     } catch (error: any) {
       dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))

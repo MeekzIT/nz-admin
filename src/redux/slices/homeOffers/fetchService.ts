@@ -8,11 +8,12 @@ import { notificationEnum } from "../notificatinSlice/types";
 //GET_OFFERS_DATA
 export const fetchGetOfferData = createAsyncThunk(
   "get/offer",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get(`/offer`);
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -27,6 +28,7 @@ export const fetchCreateOfferData = createAsyncThunk(
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CHANG_DATA, statusNotification: notificationEnum.SUCCESS }))
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -38,9 +40,11 @@ export const fetchDeleteOfferData = createAsyncThunk(
   async (id: number, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.delete(`/offer/destroy/${id}`);
+      dispatch(fetchGetOfferData())
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_DELETE, statusNotification: notificationEnum.SUCCESS }))
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }

@@ -4,16 +4,18 @@ import { HomeCreateSliterType, HomeSliterType } from "./types";
 import { SUCCESS_TEXT_AFTER_CREATE_DATA, SUCCESS_TEXT_DELETE } from "../../../constants";
 import { setNotification } from "../notificatinSlice";
 import { notificationEnum } from "../notificatinSlice/types";
+import { resetStates } from ".";
 
 //GET_ALL_SLIDERS
 export const fetchGetSlidersData = createAsyncThunk(
   "get/sliders",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get("/slider");
 
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -22,11 +24,12 @@ export const fetchGetSlidersData = createAsyncThunk(
 //GET_SINGLE_SLIDER
 export const fetchGetSliderData = createAsyncThunk(
   "get/slider",
-  async (id: number, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get(`/slider/${id}`);
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -41,6 +44,7 @@ export const fetchCreateSlider = createAsyncThunk(
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CREATE_DATA, statusNotification: notificationEnum.SUCCESS }));
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -52,10 +56,13 @@ export const fetchDeleteSlider = createAsyncThunk(
   async (id: number, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.delete(`/slider/destroy/${id}`);
+      dispatch(resetStates())
+      dispatch(fetchGetSlidersData())
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_DELETE, statusNotification: notificationEnum.SUCCESS }));
 
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }

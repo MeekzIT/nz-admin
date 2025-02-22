@@ -1,55 +1,60 @@
-import { Tabs, Tab, Avatar, Box } from '@mui/material'
-import React, { useState } from 'react'
-import { TapsForChangeImagesComponentProps } from './types';
-import ImageModalComponent from '../imageUploadModal';
-import { useAppDispatch } from '../../../redux/hooke';
-import { getValue, isEmptyObject } from '../../../utils/objectUtils';
+import React, { useState } from "react";
+import { useAppDispatch } from "../../../redux/hooke";
+import ImageModalComponent from "../imageUploadModal";
+import { TapsForChangeImagesComponentProps } from "./types";
+import { StyledTabs, StyledTab, StyledAvatarWrapper, StyledAvatar } from "./styles";
+import { Box } from "@mui/material";
+import { getValue, isEmptyObject } from "../../../utils/objectUtils";
 
-const TapsForChangeImagesComponent = ({ tabDataForMap, dataForChange, onChangeImageInObject, forCreateFlag = false }: TapsForChangeImagesComponentProps) => {
-    const [isOpenModal, setIsOpenModal] = useState(false)
-    const [value, setValue] = useState<string>(Object.values(tabDataForMap)[0].value || "");
-    const dispatch = useAppDispatch()
+const TapsForChangeImagesComponent = ({
+  tabDataForMap,
+  dataForChange,
+  onChangeImageInObject,
+  forCreateFlag = false,
+}: TapsForChangeImagesComponentProps) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [value, setValue] = useState<string>(Object.values(tabDataForMap)[0].value || "");
+  const dispatch = useAppDispatch();
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        setValue(newValue);
-    };
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
-    const handleChangeImgaeFild = (newValue: string) => {
-        dispatch(onChangeImageInObject({ key: value, text: newValue, forCreateFlag }))
-        setIsOpenModal(false)
-    }
+  const handleChangeImageField = (newValue: string) => {
+    dispatch(onChangeImageInObject({ key: value, text: newValue, forCreateFlag }));
+    setIsOpenModal(false);
+  };
 
-    return (
-        <>
-            {
-                !isEmptyObject(dataForChange) &&
-                <Box>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        aria-label="secondary tabs example"
-                    >
-                        {tabDataForMap.map((tab) => {
-                            return (
-                                <Tab value={tab.value} label={tab.label} key={tab.label} />
-                            )
-                        })}
-                    </Tabs>
+  return (
+    <>
+      {!isEmptyObject(dataForChange) && (
+        <Box>
+          <StyledTabs
+            value={value}
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            aria-label="secondary tabs example"
+          >
+            {tabDataForMap.map((tab) => (
+              <StyledTab value={tab.value} label={tab.label} key={tab.label} />
+            ))}
+          </StyledTabs>
 
-                    <Box onClick={() => setIsOpenModal(true)} sx={{ display: "flex", justifyContent: "center", m: 5 }}>
-                        <Avatar src={getValue(value, dataForChange)} sx={{ width: 200, height: 200 }} variant="square" />
-                    </Box>
+          <StyledAvatarWrapper onClick={() => setIsOpenModal(true)}>
+            <StyledAvatar src={getValue(value, dataForChange)} variant="square"/>
+          </StyledAvatarWrapper>
 
-                    <ImageModalComponent
-                        open={isOpenModal}
-                        handleClose={() => setIsOpenModal(false)}
-                        handleImageChange={handleChangeImgaeFild}
-                        name="qurduli"
-                    />
-                </Box>
-            }
-        </>
-    )
-}
+          <ImageModalComponent
+            open={isOpenModal}
+            handleClose={() => setIsOpenModal(false)}
+            handleImageChange={handleChangeImageField}
+            name="qurduli"
+          />
+        </Box>
+      )}
+    </>
+  );
+};
 
-export default TapsForChangeImagesComponent
+export default TapsForChangeImagesComponent;

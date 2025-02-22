@@ -7,12 +7,12 @@ import { notificationEnum } from "../notificatinSlice/types";
 
 export const fetchGetInfoAboutUs = createAsyncThunk(
   "get/about/page",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get("/about-us/1");
-
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -24,10 +24,9 @@ export const fetchSaveInfoAboutUs = createAsyncThunk(
     try {
       const response = await api.put("/about-us/edit/1", dataAboutUs);
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CHANG_DATA, statusNotification: notificationEnum.SUCCESS }))
-
-
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
