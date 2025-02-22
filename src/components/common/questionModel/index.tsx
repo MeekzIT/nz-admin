@@ -3,13 +3,12 @@ import { Box, Button } from '@mui/material'
 import BaseModal from '../modal'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooke'
 import { resetQuestionModalData, toggleModalStatus } from '../../../redux/slices/questionModalSlice'
-import { FetchDeleteContact, fetchGetContactsData } from '../../../redux/slices/contactsSlice/fetchService'
+import { FetchDeleteContact } from '../../../redux/slices/contactsSlice/fetchService'
 import { QuestionModalActions } from '../../../types'
-import { fetchDeleteSlider, fetchGetSlidersData } from '../../../redux/slices/homeSliderSlice/fetchService'
-import { resetStates } from '../../../redux/slices/homeSliderSlice'
-import { fetchDeleteOfferData, fetchGetOfferData } from '../../../redux/slices/homeOffers/fetchService'
-import { fetchDeleteProject, fetchGetInfoProjects } from '../../../redux/slices/projectsSlice/fetchService'
-import { resetCurrentProjectData } from '../../../redux/slices/projectsSlice'
+import { fetchDeleteSlider } from '../../../redux/slices/homeSliderSlice/fetchService'
+import { fetchDeleteOfferData } from '../../../redux/slices/homeOffers/fetchService'
+import { fetchDeleteProject } from '../../../redux/slices/projectsSlice/fetchService'
+import { FetchDeleteBid } from '../../../redux/slices/bids/fetchService'
 
 const QuestionModel = () => {
     const dispatch = useAppDispatch()
@@ -17,36 +16,21 @@ const QuestionModel = () => {
 
     const actionsMap: Record<string, () => void> = {
         [QuestionModalActions.DELETE_CONTACT]: () =>
-            elemetId ?
-                dispatch(FetchDeleteContact(elemetId))
-                    .then(() => dispatch(fetchGetContactsData()))
-                : () => { },
+            elemetId ? dispatch(FetchDeleteContact(elemetId)) : () => { },
         [QuestionModalActions.DELETE_SLIDER]: () =>
-            elemetId ?
-                dispatch(fetchDeleteSlider(Number(elemetId)))
-                    .then(() => {
-                        dispatch(fetchGetSlidersData())
-                        dispatch(resetStates())
-                    }) : () => { },
+            elemetId ? dispatch(fetchDeleteSlider(Number(elemetId))) : () => { },
         [QuestionModalActions.DELETE_OFFER]: () =>
-            elemetId ?
-                dispatch(fetchDeleteOfferData(elemetId)).then(() => {
-                    dispatch(fetchGetOfferData())
-                })
-                : () => { },
+            elemetId ? dispatch(fetchDeleteOfferData(elemetId)) : () => { },
         [QuestionModalActions.DELETE_PROJECT]: () =>
-            elemetId ?
-                dispatch(fetchDeleteProject(elemetId)).then(() => {
-                    dispatch(resetCurrentProjectData())
-                    dispatch(fetchGetInfoProjects())
-                })
-                : () => { },
+            elemetId ? dispatch(fetchDeleteProject(elemetId)) : () => { },
+        [QuestionModalActions.DELETE_BID]: () =>
+            elemetId ? dispatch(FetchDeleteBid(elemetId)) : () => { },
     };
 
     const handleConfirm = () => {
         if (actionKey && actionsMap[actionKey]) {
-            actionsMap[actionKey](); // Вызываем функцию по ключу
-            dispatch(resetQuestionModalData()); // Закрываем модалку
+            actionsMap[actionKey]();
+            dispatch(resetQuestionModalData());
         }
     };
 

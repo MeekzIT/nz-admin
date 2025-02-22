@@ -4,17 +4,18 @@ import { CreateNewProjectsType, ProjectsDataType } from "./types";
 import { setNotification } from "../notificatinSlice";
 import { notificationEnum } from "../notificatinSlice/types";
 import { SUCCESS_TEXT_AFTER_CHANG_DATA, SUCCESS_TEXT_AFTER_CREATE_DATA, SUCCESS_TEXT_DELETE } from "../../../constants";
-import { resetCreateObjectAfterCreate } from ".";
+import { resetCreateObjectAfterCreate, resetCurrentProjectData } from ".";
 
 
 //GET_ALL_PROJECTS
 export const fetchGetInfoProjects = createAsyncThunk(
   "get/projects/page",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get("/projects");
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -23,11 +24,12 @@ export const fetchGetInfoProjects = createAsyncThunk(
 //GET_PROJECT BY ID
 export const fetchGetInfoProject = createAsyncThunk(
   "get/project/page",
-  async (id: number, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.get(`/projects/${id}`);
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -36,12 +38,13 @@ export const fetchGetInfoProject = createAsyncThunk(
 //EDIT_PROJECT
 export const fetchChangeInfoProjects = createAsyncThunk(
   "change/projects/page",
-  async ({ productId, data }: { productId: number; data: ProjectsDataType }, { rejectWithValue, dispatch }) => {
+  async ({ productId, data }: { productId: number; data: CreateNewProjectsType }, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.put(`/projects/edit/${productId}`, data);
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CHANG_DATA, statusNotification: notificationEnum.SUCCESS }));
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -57,6 +60,7 @@ export const fetchCreateNewProject = createAsyncThunk(
       dispatch(resetCreateObjectAfterCreate())
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -68,9 +72,12 @@ export const fetchDeleteProject = createAsyncThunk(
   async (id: number, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.delete(`/projects/destroy/${id}`);
+      dispatch(resetCurrentProjectData())
+      dispatch(fetchGetInfoProjects())
       dispatch(setNotification({ messageNotification: SUCCESS_TEXT_DELETE, statusNotification: notificationEnum.SUCCESS }));
       return response.data;
     } catch (error: any) {
+      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
       return rejectWithValue(error.response.data.error[0]);
     }
   }

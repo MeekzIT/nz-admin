@@ -27,8 +27,4 @@ const contactsSlice = createSlice({
 
 });
 
-
-
-
-// export const { handleChangeTextFildsAboutUsShort } = contactsSlice.actions;
 export default contactsSlice.reducer;

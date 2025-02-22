@@ -3,7 +3,7 @@ export type SectionsNamesTypes = {
 };
 
 export type TableSectionsNamesProps = {
-  loadingExperts: boolean;
+  loading: boolean;
   rowNamesData: SectionsNamesTypes[]
 };
 

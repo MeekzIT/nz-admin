@@ -76,11 +76,19 @@ function Header() {
           </Box>
           <Avatar variant='square' src={Logo} alt='logo' sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, width: 100, height: 80 }} />
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: "right" } }}>
-            {pagesPaths.map(({ href, paheName }, idx) => (
-              <NavLink to={href} onClick={() => {
-                handleCloseNavMenu()
-                logOutHandler(href)
-              }} key={paheName}>{paheName}</NavLink>
+            {pagesPaths.map(({ href, paheName }) => (
+              <NavLink
+                key={paheName}
+                to={href}
+                className={({ isActive }) => (isActive ? "active" : "")}
+                onClick={() => {
+                  handleCloseNavMenu();
+                  logOutHandler(href);
+                }}
+              >
+                {paheName.toLocaleUpperCase()}
+              </NavLink>
+
             ))}
           </Box>
         </Toolbar>

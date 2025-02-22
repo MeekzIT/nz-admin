@@ -9,7 +9,8 @@
         }
 
         &.active {
-            color: "#996830";
+            color: #996830;
+            font-weight: bold;
         }
     }
 }
@@ -19,6 +20,8 @@
         color: black;
     }
     a.active {
-        color: "#996830";
+        color: #996830;
+        font-weight: bold;
+
     }
 }
