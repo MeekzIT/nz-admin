@@ -9,12 +9,14 @@ import homeOffers from "./slices/homeOffers"
 import contactsSlice from "./slices/contactsSlice"
 import questionMoadlSlice from "./slices/questionModalSlice"
 import bidsSlice from "./slices/bids"
+import homeBuildingSchem from './slices/homeBuilding'
 
 export const store = configureStore({
   reducer: {
     home: homeSlice,
     homeAbout: homeAboutShot,
     homeOffer: homeOffers,
+    bomeBuilding: homeBuildingSchem,
     admin: adminSlice,
     about: aboutSlice,
     contacts: contactsSlice,
