@@ -27,13 +27,14 @@ const BuildingHomePage = () => {
         }
     }, [dispatch, appartements, selectedFloor])
 
-    const handleChangeAccordion = (panel: number) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    const handleChangeAccordion = (panel: number) => (_: unknown, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-
-    const handleChangeNestedAccordion = (panel: number) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    
+    const handleChangeNestedAccordion = (panel: number) => (_: unknown, isExpanded: boolean) => {
         setNestedExpanded(isExpanded ? panel : false);
     };
+    
 
     if (loading) {
         return <Loader />
@@ -122,7 +123,7 @@ const BuildingHomePage = () => {
                                         {AppartementData.map(({ name, value, id }) => {
                                             return (
                                                 <Box key={id} display={"flex"}>
-                                                    <Typography>{AppartementDataForMap[name]} - {value}</Typography>
+                                                  {AppartementDataForMap[name as keyof typeof AppartementDataForMap] ?? "Неизвестно"}
                                                 </Box>
 
                                             )
