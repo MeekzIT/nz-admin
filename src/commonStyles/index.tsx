@@ -1,6 +1,5 @@
 import { Box, TextareaAutosize } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
+import { styled, Theme } from "@mui/material/styles";
 
 export const Container = styled(Box)(() => ({
   display: "flex",
@@ -9,7 +8,7 @@ export const Container = styled(Box)(() => ({
   padding: "20px",
 }));
 
-export const Block = styled(Box)(({ theme }) => ({
+export const Block = styled(Box)<{ theme: Theme }>(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "repeat(3, 1fr)", // По умолчанию 3 колонки
   gap: "15px",
@@ -25,8 +24,6 @@ export const Block = styled(Box)(({ theme }) => ({
 
   // **Адаптация под планшеты (до 1024px)**
   [theme.breakpoints.down("md")]: {
-    // gridTemplateColumns: "repeat(2, 1fr)", // 2 колонки
-    // gap: "10px",
     gridTemplateColumns: "1fr", // Одна колонка
     gap: "8px",
     padding: "15px",
@@ -34,42 +31,41 @@ export const Block = styled(Box)(({ theme }) => ({
 
   // **Адаптация под мобильные устройства (до 600px)**
   [theme.breakpoints.down("sm")]: {
-    gridTemplateColumns: "1fr", // Одна колонка
+    gridTemplateColumns: "1fr",
     gap: "8px",
     padding: "15px",
   },
 }));
 
+export const StyledTextarea = styled(TextareaAutosize)(
+  ({ theme }: { theme: Theme }) => ({
+    width: "100%",
+    padding: "12px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    fontSize: "16px",
+    minHeight: "280px",
+    resize: "vertical",
+    transition: "border 0.3s, box-shadow 0.3s",
 
-export const StyledTextarea = styled(TextareaAutosize)(({ theme }) => ({
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ccc",
-  borderRadius: "8px",
-  fontSize: "16px",
-  minHeight: "280px",
-  resize: "vertical",
-  transition: "border 0.3s, box-shadow 0.3s",
+    "&:focus": {
+      borderColor: theme.palette.primary.main,
+      boxShadow: `0 0 8px ${theme.palette.primary.light}`,
+      outline: "none",
+    },
+  })
+);
 
-  "&:focus": {
-    borderColor: theme.palette.primary.main,
-    boxShadow: `0 0 8px ${theme.palette.primary.light}`,
-    outline: "none",
-  },
-}));
-
-export const PageTitle = styled(Box)(({ theme }) => ({
+export const PageTitle = styled(Box)({
   fontSize: "24px",
   width: "100%",
   color: "#08412E",
   textAlign: "right",
-  padding:"10px"
-}));
+  padding: "10px",
+});
 
-
-export const BlockWithBackgroundBlend = styled(Box)(({ theme }) => ({
+export const BlockWithBackgroundBlend = styled(Box)({
   backgroundColor: "#f5f5f5",
   borderRadius: "12px",
   padding: "10px",
-}));
-
+});

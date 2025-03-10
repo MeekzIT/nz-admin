@@ -30,17 +30,16 @@
 //   },
 // }));
 
-
 import { styled, TableCell, tableCellClasses } from "@mui/material";
 
-export const StyledTableCellBody = styled(TableCell)<{ status: string }>(
-  ({ status }) => ({
+export const StyledTableCellBody = styled(TableCell)<{ status?: string }>(
+  (props) => ({
     maxWidth: "200px",
     minWidth: "100px",
     wordBreak: "break-word", // Переносит длинные слова
     overflowWrap: "break-word", // Гарантирует перенос слов
     whiteSpace: "normal", // Позволяет перенос строк
-    fontWeight: status ? 900 : "",
+    fontWeight: props.status ? 900 : "",
 
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: "red",
@@ -48,9 +47,9 @@ export const StyledTableCellBody = styled(TableCell)<{ status: string }>(
     },
 
     borderLeft:
-      status === "isActive"
+      props.status === "isActive"
         ? `8px solid #0eba63`
-        : status === "InActive"
+        : props.status === "InActive"
         ? `8px solid rgba(237, 82, 82, 0.16)`
         : "",
 
@@ -62,19 +61,16 @@ export const StyledTableCellBody = styled(TableCell)<{ status: string }>(
       borderCollapse: "inherit !important",
     },
 
-    // Медиа-запросы для планшетов и мобильных устройств
-    '@media (max-width: 768px)': {
+    "@media (max-width: 768px)": {
       maxWidth: "150px",
       minWidth: "80px",
       fontSize: 12,
-      // Другие стили по необходимости
     },
 
-    '@media (max-width: 480px)': {
+    "@media (max-width: 480px)": {
       maxWidth: "120px",
       minWidth: "60px",
       fontSize: 10,
-      // Другие стили по необходимости
     },
   })
 );

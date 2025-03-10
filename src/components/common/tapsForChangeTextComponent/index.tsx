@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TapsComponentProps } from "./types";
 import { useAppDispatch } from "../../../redux/hooke";
 import { StyledTextarea } from "../../../commonStyles";
@@ -14,7 +14,7 @@ const TapsForChangeTextComponent = ({
   const [value, setValue] = useState<string>(tabDataForMap[0].value);
   const dispatch = useAppDispatch();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: unknown, newValue: string) => {
     setValue(newValue);
   };
 
@@ -36,7 +36,7 @@ const TapsForChangeTextComponent = ({
 
           <StyledTextarea
             sx={{ mb: 5, mt: 2 }}
-            value={getValue(value, dataForChange)}
+            value={getValue(value as keyof typeof dataForChange, dataForChange)}
             onChange={(event) =>
               dispatch(
                 handleChangeProjectData({

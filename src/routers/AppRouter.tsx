@@ -1,4 +1,3 @@
-import React from "react";
 import { Suspense } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { routesConstatnt } from "./RoutesContsnts";
@@ -11,33 +10,45 @@ import Notification from "../components/common/notification";
 import QuestionModel from "../components/common/questionModel";
 
 const AppRoutes = () => {
-  const adminIsLoggedIn = useAppSelector((state) => state.admin.adminIsLoggedIn);
+  const adminIsLoggedIn = useAppSelector(
+    (state) => state.admin.adminIsLoggedIn
+  );
 
   return (
     <>
-
       <Suspense fallback={<Loader />}>
         <BrowserRouter>
-          {adminIsLoggedIn ? (
-            <div>
-              <Header />
-              <LayoutContent>
-                <Routes>
-                  <>
-                    {routesConstatnt.map((route) => (
-                      <Route key={route.path} path={route.path} element={route.element} />
-                    ))}
-                    <Route path="/login" element={<Navigate to="/" />} />
-                  </>
-                </Routes>
-              </LayoutContent>
-            </div>
-          ) : (
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="*" element={<Navigate to="/login" />} />
-            </Routes>
-          )}
+          <Routes>
+            {adminIsLoggedIn ? (
+              <>
+                <Route
+                  path="/*"
+                  element={
+                    <div>
+                      <Header />
+                      <LayoutContent>
+                        <Routes>
+                          {routesConstatnt.map((route) => (
+                            <Route
+                              key={route.path}
+                              path={route.path}
+                              element={route.element}
+                            />
+                          ))}
+                        </Routes>
+                      </LayoutContent>
+                    </div>
+                  }
+                />
+                <Route path="/login" element={<Navigate to="/" />} />
+              </>
+            ) : (
+              <>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/*" element={<Navigate to="/login" />} />
+              </>
+            )}
+          </Routes>
         </BrowserRouter>
       </Suspense>
       <Notification />

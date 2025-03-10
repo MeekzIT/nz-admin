@@ -21,7 +21,17 @@ api.interceptors.request.use(
     }
     return config;
   },
+  (error) => Promise.reject(error)
+);
+
+// Интерцептор для обработки ошибок (включая 403)
+api.interceptors.response.use(
+  (response) => response,
   (error) => {
+    if (error.response?.status === 403) {
+      sessionStorage.removeItem(SESSION_KEY_FOR_TOKEN); // Удаляем токен
+      window.location.href = "/login"; // Перенаправляем на страницу логина
+    }
     return Promise.reject(error);
   }
 );
@@ -32,7 +42,9 @@ export const getData = async (url: string) => {
     const response = await api.get(url);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Ошибка при загрузке данных");
+    throw new Error(
+      error.response?.data?.message || "Ошибка при загрузке данных"
+    );
   }
 };
 
@@ -42,7 +54,9 @@ export const postData = async (url: string, data: any) => {
     const response = await api.post(url, data);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Ошибка при отправке данных");
+    throw new Error(
+      error.response?.data?.message || "Ошибка при отправке данных"
+    );
   }
 };
 

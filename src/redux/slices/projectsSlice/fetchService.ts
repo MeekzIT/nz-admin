@@ -1,11 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../fetchService";
-import { CreateNewProjectsType, ProjectsDataType } from "./types";
+import { CreateNewProjectsType } from "./types";
 import { setNotification } from "../notificatinSlice";
 import { notificationEnum } from "../notificatinSlice/types";
-import { SUCCESS_TEXT_AFTER_CHANG_DATA, SUCCESS_TEXT_AFTER_CREATE_DATA, SUCCESS_TEXT_DELETE } from "../../../constants";
+import {
+  SUCCESS_TEXT_AFTER_CHANG_DATA,
+  SUCCESS_TEXT_AFTER_CREATE_DATA,
+  SUCCESS_TEXT_DELETE,
+} from "../../../constants";
 import { resetCreateObjectAfterCreate, resetCurrentProjectData } from ".";
-
 
 //GET_ALL_PROJECTS
 export const fetchGetInfoProjects = createAsyncThunk(
@@ -15,7 +18,12 @@ export const fetchGetInfoProjects = createAsyncThunk(
       const response = await api.get("/projects");
       return response.data;
     } catch (error: any) {
-      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
+      dispatch(
+        setNotification({
+          messageNotification: error.response.data.error[0],
+          statusNotification: notificationEnum.ERROR,
+        })
+      );
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -29,7 +37,12 @@ export const fetchGetInfoProject = createAsyncThunk(
       const response = await api.get(`/projects/${id}`);
       return response.data;
     } catch (error: any) {
-      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
+      dispatch(
+        setNotification({
+          messageNotification: error.response.data.error[0],
+          statusNotification: notificationEnum.ERROR,
+        })
+      );
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -38,13 +51,26 @@ export const fetchGetInfoProject = createAsyncThunk(
 //EDIT_PROJECT
 export const fetchChangeInfoProjects = createAsyncThunk(
   "change/projects/page",
-  async ({ productId, data }: { productId: number; data: CreateNewProjectsType }, { rejectWithValue, dispatch }) => {
+  async (
+    { productId, data }: { productId: number; data: CreateNewProjectsType },
+    { rejectWithValue, dispatch }
+  ) => {
     try {
       const response = await api.put(`/projects/edit/${productId}`, data);
-      dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CHANG_DATA, statusNotification: notificationEnum.SUCCESS }));
+      dispatch(
+        setNotification({
+          messageNotification: SUCCESS_TEXT_AFTER_CHANG_DATA,
+          statusNotification: notificationEnum.SUCCESS,
+        })
+      );
       return response.data;
     } catch (error: any) {
-      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
+      dispatch(
+        setNotification({
+          messageNotification: error.response.data.error[0],
+          statusNotification: notificationEnum.ERROR,
+        })
+      );
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -56,11 +82,21 @@ export const fetchCreateNewProject = createAsyncThunk(
   async (data: CreateNewProjectsType, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.post(`/projects`, data);
-      dispatch(setNotification({ messageNotification: SUCCESS_TEXT_AFTER_CREATE_DATA, statusNotification: notificationEnum.SUCCESS }));
-      dispatch(resetCreateObjectAfterCreate())
+      dispatch(
+        setNotification({
+          messageNotification: SUCCESS_TEXT_AFTER_CREATE_DATA,
+          statusNotification: notificationEnum.SUCCESS,
+        })
+      );
+      dispatch(resetCreateObjectAfterCreate());
       return response.data;
     } catch (error: any) {
-      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
+      dispatch(
+        setNotification({
+          messageNotification: error.response.data.error[0],
+          statusNotification: notificationEnum.ERROR,
+        })
+      );
       return rejectWithValue(error.response.data.error[0]);
     }
   }
@@ -72,12 +108,22 @@ export const fetchDeleteProject = createAsyncThunk(
   async (id: number, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.delete(`/projects/destroy/${id}`);
-      dispatch(resetCurrentProjectData())
-      dispatch(fetchGetInfoProjects())
-      dispatch(setNotification({ messageNotification: SUCCESS_TEXT_DELETE, statusNotification: notificationEnum.SUCCESS }));
+      dispatch(resetCurrentProjectData());
+      dispatch(fetchGetInfoProjects());
+      dispatch(
+        setNotification({
+          messageNotification: SUCCESS_TEXT_DELETE,
+          statusNotification: notificationEnum.SUCCESS,
+        })
+      );
       return response.data;
     } catch (error: any) {
-      dispatch(setNotification({ messageNotification: error.response.data.error[0], statusNotification: notificationEnum.ERROR }))
+      dispatch(
+        setNotification({
+          messageNotification: error.response.data.error[0],
+          statusNotification: notificationEnum.ERROR,
+        })
+      );
       return rejectWithValue(error.response.data.error[0]);
     }
   }

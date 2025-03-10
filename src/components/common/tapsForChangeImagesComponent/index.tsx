@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAppDispatch } from "../../../redux/hooke";
 import ImageModalComponent from "../imageUploadModal";
 import { TapsForChangeImagesComponentProps } from "./types";
-import { StyledTabs, StyledTab, StyledAvatarWrapper, StyledAvatar } from "./styles";
+import {
+  StyledTabs,
+  StyledTab,
+  StyledAvatarWrapper,
+  StyledAvatar,
+} from "./styles";
 import { Box } from "@mui/material";
 import { getValue, isEmptyObject } from "../../../utils/objectUtils";
 
@@ -13,15 +18,19 @@ const TapsForChangeImagesComponent = ({
   forCreateFlag = false,
 }: TapsForChangeImagesComponentProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [value, setValue] = useState<string>(Object.values(tabDataForMap)[0].value || "");
+  const [value, setValue] = useState<string>(
+    Object.values(tabDataForMap)[0].value || ""
+  );
   const dispatch = useAppDispatch();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: unknown, newValue: string) => {
     setValue(newValue);
   };
 
   const handleChangeImageField = (newValue: string) => {
-    dispatch(onChangeImageInObject({ key: value, text: newValue, forCreateFlag }));
+    dispatch(
+      onChangeImageInObject({ key: value, text: newValue, forCreateFlag })
+    );
     setIsOpenModal(false);
   };
 
@@ -42,7 +51,10 @@ const TapsForChangeImagesComponent = ({
           </StyledTabs>
 
           <StyledAvatarWrapper onClick={() => setIsOpenModal(true)}>
-            <StyledAvatar src={getValue(value, dataForChange)} variant="square"/>
+            <StyledAvatar
+              src={getValue(value as keyof typeof dataForChange, dataForChange)}
+              variant="square"
+            />
           </StyledAvatarWrapper>
 
           <ImageModalComponent

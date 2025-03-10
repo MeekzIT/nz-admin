@@ -1,11 +1,38 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ProjectsInitialState, ProjectsNamesType } from "./types";
-import { fetchChangeInfoProjects, fetchCreateNewProject, fetchDeleteProject, fetchGetInfoProject, fetchGetInfoProjects } from "./fetchService";
+import {
+  fetchChangeInfoProjects,
+  fetchCreateNewProject,
+  fetchDeleteProject,
+  fetchGetInfoProject,
+  fetchGetInfoProjects,
+} from "./fetchService";
 import { initialDataForCreateProduct } from "./constants";
+
+const initionCurrentData = {
+  id: 0,
+  titleAm: "",
+  titleRu: "",
+  titleEn: "",
+  textAm_1: "",
+  textRu_1: "",
+  textEn_1: "",
+  image_11: "",
+  image_12: "",
+  image_13: "",
+  image_14: "",
+  textAm_2: "",
+  textRu_2: "",
+  textEn_2: "",
+  image_21: "",
+  image_22: "",
+  image_23: "",
+  image_24: "",
+};
 
 const initialState: ProjectsInitialState = {
   projectsNames: [],
-  currentProject: {},
+  currentProject: initionCurrentData,
   createProectdata: initialDataForCreateProduct,
   loading: false,
 };
@@ -14,30 +41,36 @@ const projectsSlice = createSlice({
   name: "projects",
   initialState,
   reducers: {
-
-    handleChangeProjectData: (state, action: PayloadAction<{ key: string; text: string, forCreateFlag?: boolean }>) => {
+    handleChangeProjectData: (
+      state,
+      action: PayloadAction<{
+        key: string;
+        text: string;
+        forCreateFlag?: boolean;
+      }>
+    ) => {
       if (state.currentProject && !action.payload.forCreateFlag) {
         state.currentProject = {
           ...state.currentProject,
-          [action.payload.key]: action.payload.text
-        }
+          [action.payload.key]: action.payload.text,
+        };
       }
 
       if (state.createProectdata && action.payload.forCreateFlag) {
         state.createProectdata = {
           ...state.createProectdata,
-          [action.payload.key]: action.payload.text
-        }
+          [action.payload.key]: action.payload.text,
+        };
       }
     },
 
     resetCreateObjectAfterCreate: (state) => {
-      state.createProectdata = initialDataForCreateProduct
+      state.createProectdata = initialDataForCreateProduct;
     },
 
     resetCurrentProjectData: (state) => {
-      state.currentProject = {}
-    }
+      state.currentProject = initionCurrentData;
+    },
   },
 
   extraReducers: (builder) => {
@@ -47,10 +80,12 @@ const projectsSlice = createSlice({
       })
       .addCase(fetchGetInfoProjects.fulfilled, (state, action) => {
         if (action.payload) {
-          const convertData = action.payload.map(({ id, titleAm }: ProjectsNamesType) => {
-            return { id, titleAm }
-          })
-          state.projectsNames = convertData
+          const convertData = action.payload.map(
+            ({ id, titleAm }: ProjectsNamesType) => {
+              return { id, titleAm };
+            }
+          );
+          state.projectsNames = convertData;
         }
         state.loading = false;
       })
@@ -76,7 +111,7 @@ const projectsSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchGetInfoProject.fulfilled, (state, action) => {
-        state.currentProject = action.payload
+        state.currentProject = action.payload;
         state.loading = false;
       })
       .addCase(fetchGetInfoProject.rejected, (state) => {
@@ -107,9 +142,12 @@ const projectsSlice = createSlice({
         state.loading = false;
       });
   },
-
 });
 
-export const { handleChangeProjectData, resetCreateObjectAfterCreate, resetCurrentProjectData } = projectsSlice.actions;
+export const {
+  handleChangeProjectData,
+  resetCreateObjectAfterCreate,
+  resetCurrentProjectData,
+} = projectsSlice.actions;
 
 export default projectsSlice.reducer;
